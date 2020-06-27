@@ -44,7 +44,7 @@ export const FoodList = styled(FlatList as new () => FlatList<Product>)`
   margin-top: 16px;
 `;
 
-export const Food = styled.TouchableOpacity`
+export const Food = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;

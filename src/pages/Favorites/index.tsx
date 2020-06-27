@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Image } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import formatValue from '../../utils/formatValue';
 
@@ -31,6 +32,8 @@ const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Food[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const navigation = useNavigation();
+
   async function loadFavorites(): Promise<void> {
     const response = await api.get<Food[]>('favorites');
 
@@ -54,6 +57,15 @@ const Favorites: React.FC = () => {
     loadFavorites();
   }, []);
 
+  const handleNavigateFood = useCallback(
+    (id: number) => {
+      navigation.navigate('FoodDetails', {
+        id,
+      });
+    },
+    [navigation],
+  );
+
   return (
     <Container>
       <Header>
@@ -67,7 +79,10 @@ const Favorites: React.FC = () => {
           onRefresh={refresh}
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
-            <Food activeOpacity={0.6}>
+            <Food
+              activeOpacity={0.6}
+              onPress={() => handleNavigateFood(item.id)}
+            >
               <FoodImageContainer>
                 <Image
                   style={{ width: 88, height: 88 }}
