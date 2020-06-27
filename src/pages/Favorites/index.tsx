@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Image } from 'react-native';
 
 import api from '../../services/api';
@@ -29,21 +29,28 @@ interface Food {
 
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Food[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function loadFavorites(): Promise<void> {
+    const response = await api.get<Food[]>('favorites');
+
+    const listFavorites = response.data.map(favorite => {
+      return {
+        ...favorite,
+        formattedPrice: formatValue(favorite.price),
+      };
+    });
+
+    setFavorites(listFavorites);
+    setRefreshing(false);
+  }
 
   useEffect(() => {
-    async function loadFavorites(): Promise<void> {
-      const response = await api.get<Food[]>('favorites');
+    loadFavorites();
+  }, []);
 
-      const listFavorites = response.data.map(favorite => {
-        return {
-          ...favorite,
-          formattedPrice: formatValue(favorite.price),
-        };
-      });
-
-      setFavorites(listFavorites);
-    }
-
+  const refresh = useCallback(() => {
+    setRefreshing(true);
     loadFavorites();
   }, []);
 
@@ -56,6 +63,8 @@ const Favorites: React.FC = () => {
       <FoodsContainer>
         <FoodList
           data={favorites}
+          refreshing={refreshing}
+          onRefresh={refresh}
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <Food activeOpacity={0.6}>

@@ -89,6 +89,16 @@ const FoodDetails: React.FC = () => {
           };
         }),
       );
+
+      const favorites = await api.get<Food[]>('/favorites');
+
+      const favorited = favorites.data.find(
+        favorite => favorite.id === food.id,
+      );
+
+      if (favorited) {
+        setIsFavorite(true);
+      }
     }
 
     loadFood();
@@ -135,8 +145,14 @@ const FoodDetails: React.FC = () => {
   }
 
   const toggleFavorite = useCallback(() => {
-    setIsFavorite(state => !state);
-  }, []);
+    if (isFavorite) {
+      api.delete(`/favorites/${food.id}`);
+      setIsFavorite(false);
+    } else {
+      api.post('favorites', food);
+      setIsFavorite(true);
+    }
+  }, [food, isFavorite]);
 
   const cartTotal = useMemo(() => {
     const extrasTotal = extras.reduce(
@@ -156,6 +172,7 @@ const FoodDetails: React.FC = () => {
   async function handleFinishOrder(): Promise<void> {
     const productId = food.id;
     delete food.id;
+    food.formattedPrice = cartTotal;
 
     await api.post('orders', {
       ...food,
