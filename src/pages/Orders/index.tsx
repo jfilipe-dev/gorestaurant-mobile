@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Image } from 'react-native';
 
 import api from '../../services/api';
@@ -23,18 +23,35 @@ interface Food {
   name: string;
   description: string;
   price: number;
-  formattedValue: number;
+  formattedValue: string;
   thumbnail_url: string;
 }
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Food[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function loadOrders(): Promise<void> {
+    const response = await api.get<Food[]>('/orders');
+
+    const orderList = response.data.map(order => {
+      return {
+        ...order,
+        formattedValue: formatValue(order.price),
+      };
+    });
+
+    setOrders(orderList);
+
+    setRefreshing(false);
+  }
 
   useEffect(() => {
-    async function loadOrders(): Promise<void> {
-      // Load orders from API
-    }
+    loadOrders();
+  }, []);
 
+  const refresh = useCallback(() => {
+    setRefreshing(true);
     loadOrders();
   }, []);
 
@@ -47,6 +64,8 @@ const Orders: React.FC = () => {
       <FoodsContainer>
         <FoodList
           data={orders}
+          onRefresh={refresh}
+          refreshing={refreshing}
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <Food key={item.id} activeOpacity={0.6}>
@@ -59,7 +78,7 @@ const Orders: React.FC = () => {
               <FoodContent>
                 <FoodTitle>{item.name}</FoodTitle>
                 <FoodDescription>{item.description}</FoodDescription>
-                <FoodPricing>{item.formattedPrice}</FoodPricing>
+                <FoodPricing>{item.formattedValue}</FoodPricing>
               </FoodContent>
             </Food>
           )}

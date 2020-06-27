@@ -92,7 +92,7 @@ const FoodDetails: React.FC = () => {
     }
 
     loadFood();
-  }, [routeParams]);
+  }, [food.id, routeParams]);
 
   function handleIncrementExtra(id: number): void {
     const newExtras = extras.map(extra => {
@@ -135,8 +135,8 @@ const FoodDetails: React.FC = () => {
   }
 
   const toggleFavorite = useCallback(() => {
-    // Toggle if food is favorite or not
-  }, [isFavorite, food]);
+    setIsFavorite(state => !state);
+  }, []);
 
   const cartTotal = useMemo(() => {
     const extrasTotal = extras.reduce(
@@ -154,7 +154,15 @@ const FoodDetails: React.FC = () => {
   }, [extras, food, foodQuantity]);
 
   async function handleFinishOrder(): Promise<void> {
-    // Finish the order and save on the API
+    const productId = food.id;
+    delete food.id;
+
+    await api.post('orders', {
+      ...food,
+      productId,
+    });
+
+    navigation.navigate('DashboardStack');
   }
 
   // Calculate the correct icon name
