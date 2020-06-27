@@ -180,6 +180,11 @@ const FoodDetails: React.FC = () => {
     });
 
     navigation.navigate('DashboardStack');
+
+    Alert.alert(
+      'Pedido realizado com sucesso',
+      `Valor total do pedido: ${cartTotal}`,
+    );
   }
 
   // Calculate the correct icon name
