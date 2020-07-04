@@ -1,8 +1,8 @@
 # GoRestaurant
-#### A mobile cart application.
+#### A mobile application to make orders for a restaurant.
 
 ### 📺 Preview
-![preview-gorestaurant-mobile](https://user-images.githubusercontent.com/55659197/81866712-f857b100-9545-11ea-9a6b-3a1f04551eeb.gif)
+![preview-gorestaurant-mobile](https://user-images.githubusercontent.com/55659197/86515118-3d34f100-bded-11ea-856f-e9289ccf2927.gif)
 
 
 ### 👨🏻‍💻 Stack and extensions
@@ -11,20 +11,23 @@
 - React navigation
 - Styled components
 - Json server
-- Async storage
+- React native vector icons
 
 ### 💻 Features
-- List products
-- Add products in cart
-- Increment the quantity of a product
-- Decrement the quantity of a product
-- Calculates total cart items
-- Calculates total value of the products
-- Save cart items to memory
+- List dishes
+- List dishes by category
+- Search for dishes
+- Make orders
+- Add extras on order
+- Increase and decrease the number of dishes
+- List orders maked
+- Add favorite dishes
+- List favorite dishes
+
 
 ### 💾 How to install
 1. Clone this repository - 
-`git clone https://github.com/jfilipe-dev/gomarketplace.git`
+`git clone https://github.com/jfilipe-dev/gorestaurant-mobile.git`
 
 2. Install the dependencies - 
 `yarn`
