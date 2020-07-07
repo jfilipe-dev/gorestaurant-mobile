@@ -2,7 +2,7 @@
 #### A mobile application to make orders for a restaurant.
 
 ### 📺 Preview
-![preview-gorestaurant-mobile](https://user-images.githubusercontent.com/55659197/86515118-3d34f100-bded-11ea-856f-e9289ccf2927.gif)
+<img src="https://user-images.githubusercontent.com/55659197/86515118-3d34f100-bded-11ea-856f-e9289ccf2927.gif" width="280">
 
 
 ### 👨🏻‍💻 Stack and extensions
